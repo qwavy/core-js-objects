@@ -61,8 +61,13 @@ function mergeObjects(objects) {
  *    removeProperties({name: 'John', age: 30, city: 'New York'}, ['age']) => {name: 'John', city: 'New York'}
  *
  */
-function removeProperties(/* obj, keys */) {
-  throw new Error('Not implemented');
+function removeProperties(obj, keys) {
+  const res = obj;
+  keys.forEach((key) => {
+    delete res[key];
+  });
+
+  return res;
 }
 
 /**
@@ -77,8 +82,15 @@ function removeProperties(/* obj, keys */) {
  *    compareObjects({a: 1, b: 2}, {a: 1, b: 2}) => true
  *    compareObjects({a: 1, b: 2}, {a: 1, b: 3}) => false
  */
-function compareObjects(/* obj1, obj2 */) {
-  throw new Error('Not implemented');
+function compareObjects(obj1, obj2) {
+  const keysObj1 = Object.keys(obj1);
+  for (let i = 0; i < keysObj1.length; i += 1) {
+    if (obj1[keysObj1[i]] !== obj2[keysObj1[i]]) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 /**
@@ -112,8 +124,8 @@ function isEmptyObject(obj) {
  *    immutableObj.newProp = 'new';
  *    console.log(immutableObj) => {a: 1, b: 2}
  */
-function makeImmutable(/* obj */) {
-  throw new Error('Not implemented');
+function makeImmutable(obj) {
+  return Object.freeze(obj);
 }
 
 /**
@@ -152,8 +164,17 @@ function makeWord(lettersObject) {
  *    sellTickets([25, 25, 50]) => true
  *    sellTickets([25, 100]) => false (The seller does not have enough money to give change.)
  */
-function sellTickets(/* queue */) {
-  throw new Error('Not implemented');
+function sellTickets(queue) {
+  let money = 0;
+  for (let i = 0; i < queue.length; i += 1) {
+    const change = queue[i] - 25;
+    if (money - change < 0) {
+      return false;
+    }
+    money += queue[i];
+  }
+
+  return true;
 }
 
 /**
