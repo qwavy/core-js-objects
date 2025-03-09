@@ -225,8 +225,9 @@ function getJSON(obj) {
  *    const r = fromJSON(Circle.prototype, '{"radius":10}');
  *
  */
-function fromJSON(/* proto, json */) {
-  throw new Error('Not implemented');
+function fromJSON(proto, json) {
+  const arr = Object.values(JSON.parse(json));
+  return new proto.constructor(...arr);
 }
 
 /**
@@ -294,8 +295,21 @@ function sortCitiesArray(arr) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  const res = new Map();
+  res.get(valueSelector);
+  const vals = array.map(valueSelector);
+  array.map(keySelector).forEach((key, index) => {
+    if (!res.has(key)) {
+      res.set(key, [vals[index]]);
+    } else {
+      const result = res.get(key);
+      result.push(vals[index]);
+      res.set(key, result);
+    }
+  });
+
+  return res;
 }
 
 /**
@@ -353,32 +367,45 @@ function group(/* array, keySelector, valueSelector */) {
  */
 
 const cssSelectorBuilder = {
-  element(/* value */) {
-    throw new Error('Not implemented');
+  res: '',
+  element(value) {
+    this.res += value;
+    return this;
   },
 
-  id(/* value */) {
-    throw new Error('Not implemented');
+  id(value) {
+    this.res += `#${value}`;
+    return this;
   },
 
-  class(/* value */) {
-    throw new Error('Not implemented');
+  class(value) {
+    this.res += `.${value}`;
+    return this;
   },
 
-  attr(/* value */) {
-    throw new Error('Not implemented');
+  attr(value) {
+    this.res += `[${value}]`;
+    return this;
   },
 
-  pseudoClass(/* value */) {
-    throw new Error('Not implemented');
+  pseudoClass(value) {
+    this.res += `:${value}`;
+    return this;
   },
 
-  pseudoElement(/* value */) {
-    throw new Error('Not implemented');
+  pseudoElement(value) {
+    this.res += `::${value}`;
+    return this;
   },
 
   combine(/* selector1, combinator, selector2 */) {
     throw new Error('Not implemented');
+  },
+
+  stringify() {
+    const temp = this.res;
+    this.res = '';
+    return temp;
   },
 };
 
